@@ -3,6 +3,7 @@ from abc import ABCMeta
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Union
+from marshmallow import EXCLUDE
 
 import yaml
 from dataclasses_json import DataClassJsonMixin
@@ -32,4 +33,4 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
             path = self.FILE_PATH
         built_path = build_path(path, path_is_absolute)
         dictionary_config = yaml.full_load(built_path.read_text(encoding="UTF-8"))
-        self.__dict__.update(self.__class__.schema().load(dictionary_config).__dict__)
+        self.__dict__.update(self.__class__.schema().load(dictionary_config, unknown=EXCLUDE).__dict__)
