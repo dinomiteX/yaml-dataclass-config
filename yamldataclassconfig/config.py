@@ -22,7 +22,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # pylint: disable=invalid-name
     FILE_PATH: Path = field(default=build_path("config.yml"), init=False, metadata=metadata_dataclasses_json)
 
-    def load(self, path: Union[Path, str] = None, path_is_absolute: bool = False):
+    def load(self, path: Union[Path, str] = None, path_is_absolute: bool = False, unknown: str = EXCLUDE):
         """
         This method loads from YAML file to properties of self instance.
         Why doesn't load when __init__ is to make the following requirements compatible:
@@ -33,4 +33,4 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
             path = self.FILE_PATH
         built_path = build_path(path, path_is_absolute)
         dictionary_config = yaml.full_load(built_path.read_text(encoding="UTF-8"))
-        self.__dict__.update(self.__class__.schema().load(dictionary_config, unknown=EXCLUDE).__dict__)
+        self.__dict__.update(self.__class__.schema().load(dictionary_config, unknown=unknown).__dict__)
